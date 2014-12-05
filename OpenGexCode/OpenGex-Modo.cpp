@@ -585,7 +585,7 @@ LxResult DeformerWeightToVertexVisitor::Evaluate()
 		}
 	}
 
-	return (LXe_OK);
+	return (result);
 }
 
 LxResult DeformerWeightToVertexVisitor::EvaluateLocatorPass()
@@ -822,17 +822,15 @@ LxResult OpenGexExport::ss_Save()
 		Write("Metric (key = \"angle\") {float {1}}\n");
 		Write("Metric (key = \"time\") {float {1}}\n");
 
-		if (upAxis == LXsPREFERENCE_VALUE_UP_AXIS_X)
+		if (upAxis == LXsPREFERENCE_VALUE_UP_AXIS_Z)
 		{
-			Write("Metric (key = \"up\") {string {\"x\"}}\n");
-		}
-		else if (upAxis == LXsPREFERENCE_VALUE_UP_AXIS_Y)
-		{
-			Write("Metric (key = \"up\") {string {\"y\"}}\n");
+			Write("Metric (key = \"up\") {string {\"z\"}}\n");
 		}
 		else
 		{
-			Write("Metric (key = \"up\") {string {\"z\"}}\n");
+			// If not Z up then default to Y
+
+			Write("Metric (key = \"up\") {string {\"y\"}}\n");
 		}
 
 		// This is called on the second pass, we just want to parse the captured
@@ -1106,8 +1104,6 @@ void OpenGexExport::AddPolygon()
 
 bool OpenGexExport::FindGroupDeformer(CLxUser_Item& meshItem, CLxUser_GroupDeformer& groupDeformer, unsigned& groupDeformerMeshIndex)
 {
-	bool found = false;
-
 	CLxUser_DeformerService deformerSvc;
 	CLxUser_Item deformer;
 
@@ -1187,15 +1183,14 @@ bool OpenGexExport::FindGroupDeformer(CLxUser_Item& meshItem, CLxUser_GroupDefor
 					{
 						// Found at least one deformer.
 
-						found = true;
-						break;
+						return (true);
 					}
 				}
 			}
 		}
 	}
 
-	return (found);
+	return (false);
 }
 
 void OpenGexExport::ClearData()

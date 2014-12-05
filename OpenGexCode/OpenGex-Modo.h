@@ -53,8 +53,6 @@
 #include <vector>
 #include <sstream>
 
-//#include <vld.h> // http://vld.codeplex.com
-
 typedef double Quaternion[4];
 
 typedef enum en_RotationOrder
